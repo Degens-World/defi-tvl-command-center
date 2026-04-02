@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeFi TVL Command Center</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <div>
+          <h1>DeFi TVL Command Center</h1>
+          <p class="tagline">Real-time Total Value Locked across all chains & protocols</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-pill" id="total-tvl-pill">
+          <span class="stat-label">Total DeFi TVL</span>
+          <span class="stat-value" id="total-tvl-val">—</span>
+        </div>
+        <div class="stat-pill" id="chain-count-pill">
+          <span class="stat-label">Active Chains</span>
+          <span class="stat-value" id="chain-count-val">—</span>
+        </div>
+        <div class="stat-pill" id="protocol-count-pill">
+          <span class="stat-label">Protocols</span>
+          <span class="stat-value" id="protocol-count-val">—</span>
+        </div>
+        <div class="refresh-info">
+          <span id="last-update">Loading...</span>
+          <button id="refresh-btn" onclick="refreshAll()">↻ Refresh</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Chain TVL Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Chain TVL Breakdown</h2>
+        <span class="section-sub">Top chains by locked value</span>
+      </div>
+      <div class="chain-grid">
+        <div class="chart-card">
+          <h3>TVL Distribution</h3>
+          <div class="chart-wrap">
+            <canvas id="chainPieChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card wide">
+          <h3>Top Chains by TVL</h3>
+          <div class="chart-wrap tall">
+            <canvas id="chainBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Protocol Explorer -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Protocol Explorer</h2>
+        <div class="controls">
+          <select id="category-filter" onchange="filterProtocols()">
+            <option value="">All Categories</option>
+          </select>
+          <select id="chain-filter" onchange="filterProtocols()">
+            <option value="">All Chains</option>
+          </select>
+          <input type="text" id="protocol-search" placeholder="Search protocols..." oninput="filterProtocols()" />
+          <select id="sort-by" onchange="filterProtocols()">
+            <option value="tvl">Sort by TVL</option>
+            <option value="change1d">Sort by 1D Change</option>
+            <option value="change7d">Sort by 7D Change</option>
+          </select>
+        </div>
+      </div>
+      <div id="protocol-table-wrap">
+        <table id="protocol-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Protocol</th>
+              <th>Category</th>
+              <th>Chains</th>
+              <th>TVL</th>
+              <th>1D Change</th>
+              <th>7D Change</th>
+            </tr>
+          </thead>
+          <tbody id="protocol-tbody">
+            <tr><td colspan="7" class="loading-row">Loading protocols...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <button onclick="prevPage()" id="prev-btn">← Prev</button>
+        <span id="page-info">Page 1</span>
+        <button onclick="nextPage()" id="next-btn">Next →</button>
+      </div>
+    </section>
+
+    <!-- Movers Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Top Movers (7D)</h2>
+        <span class="section-sub">Biggest TVL changes in the last 7 days</span>
+      </div>
+      <div class="movers-grid">
+        <div class="movers-card gainers">
+          <h3>🚀 Top Gainers</h3>
+          <ul id="gainers-list"><li class="loading-item">Loading...</li></ul>
+        </div>
+        <div class="movers-card losers">
+          <h3>📉 Top Losers</h3>
+          <ul id="losers-list"><li class="loading-item">Loading...</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Historical TVL Chart -->
+    <section class="section">
+      <div class="section-header">
+        <h2>DeFi TVL History</h2>
+        <div class="controls">
+          <button class="range-btn active" onclick="setRange(365, this)">1Y</button>
+          <button class="range-btn" onclick="setRange(180, this)">6M</button>
+          <button class="range-btn" onclick="setRange(90, this)">3M</button>
+          <button class="range-btn" onclick="setRange(30, this)">1M</button>
+        </div>
+      </div>
+      <div class="chart-card full-width">
+        <div class="chart-wrap xtall">
+          <canvas id="tvlHistoryChart"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Data via <a href="https://defillama.com" target="_blank">DeFiLlama</a> public API · Auto-refreshes every 5 minutes · Built for <a href="https://degens.world" target="_blank">Degens.World</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
