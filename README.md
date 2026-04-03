@@ -18,7 +18,7 @@ Real-time Total Value Locked (TVL) dashboard across all DeFi chains and protocol
 
 ## Live
 
-[https://ad-defi-tvl-command-center.vercel.app](https://ad-defi-tvl-command-center.vercel.app)
+[https://ad-defi-tvl-command-center-17751328.vercel.app)
 
 ---
 
